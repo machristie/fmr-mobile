@@ -3,6 +3,7 @@ $(document).on("mobileinit", function () {
     $.mobile.linkBindingEnabled = false;
     $.mobile.hashListeningEnabled = false;
     $.mobile.pushStateEnabled = false;
+    $.mobile.autoInitializePage = false;
 
     // Remove page from DOM when it's being replaced
     $(document).on('pagehide', 'div[data-role="page"]', function (event, ui) {
