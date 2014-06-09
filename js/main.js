@@ -1,4 +1,9 @@
-window.HomeView = Backbone.View.extend({
+window.PageView = Backbone.View.extend({
+    // Set up listeners, especially to Models
+    startListening: function(){}
+});
+
+window.HomeView = window.PageView.extend({
 
     template:_.template($('#home').html()),
 
@@ -8,7 +13,7 @@ window.HomeView = Backbone.View.extend({
     }
 });
 
-window.Page1View = Backbone.View.extend({
+window.Page1View = window.PageView.extend({
 
     template:_.template($('#page1').html()),
 
@@ -18,7 +23,7 @@ window.Page1View = Backbone.View.extend({
     }
 });
 
-window.Page2View = Backbone.View.extend({
+window.Page2View = window.PageView.extend({
 
     template:_.template($('#page2').html()),
 
@@ -36,6 +41,14 @@ var AppRouter = Backbone.Router.extend({
         "page2":"page2"
     },
 
+    pages: {
+        home: new HomeView(),
+        page1: new Page1View(),
+        page2: new Page2View()
+    },
+
+    prevPage: null,
+
     initialize:function () {
         // Handle back button throughout the application
         $(document).on('click', '.back', function(event) {
@@ -47,20 +60,21 @@ var AppRouter = Backbone.Router.extend({
 
     home:function () {
         console.log('#home');
-        this.changePage(new HomeView());
+        this.changePage(this.pages.home);
     },
 
     page1:function () {
         console.log('#page1');
-        this.changePage(new Page1View());
+        this.changePage(this.pages.page1);
     },
 
     page2:function () {
         console.log('#page2');
-        this.changePage(new Page2View());
+        this.changePage(this.pages.page2);
     },
 
     changePage:function (page) {
+        page.startListening();
         $(page.el).attr('data-role', 'page');
         page.render();
         $('body').append($(page.el));
@@ -74,6 +88,10 @@ var AppRouter = Backbone.Router.extend({
             this.firstPage = false;
         }
         $.mobile.changePage($(page.el), {changeHash:false, transition: transition});
+        if (this.prevPage){
+            this.prevPage.stopListening();
+        }
+        this.prevPage = page;
     }
 
 });
