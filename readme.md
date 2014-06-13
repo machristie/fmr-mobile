@@ -27,3 +27,12 @@ the first page to the DOM.
 That said, I don't know that there is any harm in letting `autoInitializePage`
 left set to `true`.  It will add a dummy page to the DOM but you can ignore it
 (or remove it).
+
+# PageView.startListening
+
+To create new jQuery Mobile pages, extend `PageView` and implement/override
+`startListening`. The way `startListening` should work is that, basically, all
+of the `listenTo` calls you would have made in `initialize` you would put in
+`startListening` instead. `startListening` is called by the Router before
+`$.mobile.changePage` is called on that page. `stopListening` is called on a
+page when transitioning to another page.
