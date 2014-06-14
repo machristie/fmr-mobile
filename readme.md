@@ -4,11 +4,6 @@ Based on coenraets [backbone-jquerymobile](https://github.com/ccoenraets/backbon
 
 # TODO
 
-* Need to call Backbone.View.remove() when changing the page
-    * listen for pagecontainer events?
-    * Backbone Fundamentals says use $.detach instead?
-    * jQuery Mobile just hides pages, only shows the active one, with class
-      ui-page-active
 * Turn off jQuery Mobile's DOM caching?
 * Check out: https://github.com/addyosmani/backbone-fundamentals/tree/gh-pages/practicals/todo-jqm-app
 
@@ -36,3 +31,17 @@ of the `listenTo` calls you would have made in `initialize` you would put in
 `startListening` instead. `startListening` is called by the Router before
 `$.mobile.changePage` is called on that page. `stopListening` is called on a
 page when transitioning to another page.
+
+# Enhancing the PageView
+
+Whenever `render()` is called, the *page* needs to be re-enhanced.  jQuery
+Mobile will automatically enhance a *page* the first time it is changed to, but
+after that you need to call it yourself. So most of the time for a PageView, you
+implement render like so:
+
+    render: function () {
+        // do some rendering
+        // ...
+        this.$el.page().enhanceWithin();
+        return this;
+    }
