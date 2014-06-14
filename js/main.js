@@ -1,4 +1,10 @@
 window.PageView = Backbone.View.extend({
+    role: "page",
+    attributes: function() {
+        return {
+            "data-role" : this.role
+        };
+    },
     // Set up listeners, especially to Models
     startListening: function(){}
 });
@@ -81,7 +87,6 @@ var AppRouter = Backbone.Router.extend({
 
     changePage:function (page) {
         page.startListening();
-        $(page.el).attr('data-role', 'page');
         page.render();
         if ($('#'+page.id).length === 0) {
             $('body').append($(page.el));
