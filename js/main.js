@@ -94,9 +94,9 @@ var AppRouter = Backbone.Router.extend({
 
     changePage:function (page) {
         page.startListening();
-        page.render();
+        // Render and add page to DOM once
         if ($('#'+page.id).length === 0) {
-            $('body').append($(page.el));
+            $('body').append(page.render().$el);
         }
         var transition = $.mobile.defaultPageTransition;
         // We don't want to slide the first page
