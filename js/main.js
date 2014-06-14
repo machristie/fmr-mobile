@@ -5,6 +5,8 @@ window.PageView = Backbone.View.extend({
 
 window.HomeView = window.PageView.extend({
 
+    id: 'home-view',
+
     template:_.template($('#home').html()),
 
     render:function (eventName) {
@@ -15,6 +17,8 @@ window.HomeView = window.PageView.extend({
 
 window.Page1View = window.PageView.extend({
 
+    id: 'page1-view',
+
     template:_.template($('#page1').html()),
 
     render:function (eventName) {
@@ -24,6 +28,8 @@ window.Page1View = window.PageView.extend({
 });
 
 window.Page2View = window.PageView.extend({
+
+    id: 'page2-view',
 
     template:_.template($('#page2').html()),
 
@@ -77,7 +83,10 @@ var AppRouter = Backbone.Router.extend({
         page.startListening();
         $(page.el).attr('data-role', 'page');
         page.render();
-        $('body').append($(page.el));
+        if ($('#'+page.id).length === 0) {
+            $('body').append($(page.el));
+        }
+        $(page.el).page().enhanceWithin();
         var transition = $.mobile.defaultPageTransition;
         // We don't want to slide the first page
         if (this.firstPage) {
