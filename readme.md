@@ -42,6 +42,6 @@ implement render like so:
     render: function () {
         // do some rendering
         // ...
-        this.$el.page().enhanceWithin();
+        this.enhance(); // See PageView.enhance for details
         return this;
     }

@@ -6,7 +6,11 @@ window.PageView = Backbone.View.extend({
         };
     },
     // Set up listeners, especially to Models
-    startListening: function(){}
+    startListening: function(){},
+    enhance: function() {
+        this.$el.page().enhanceWithin();
+        return this;
+    }
 });
 
 window.HomeView = window.PageView.extend({
@@ -17,6 +21,7 @@ window.HomeView = window.PageView.extend({
 
     render:function (eventName) {
         $(this.el).html(this.template());
+        this.enhance();
         return this;
     }
 });
@@ -29,6 +34,7 @@ window.Page1View = window.PageView.extend({
 
     render:function (eventName) {
         $(this.el).html(this.template());
+        this.enhance();
         return this;
     }
 });
@@ -41,6 +47,7 @@ window.Page2View = window.PageView.extend({
 
     render:function (eventName) {
         $(this.el).html(this.template());
+        this.enhance();
         return this;
     }
 });
@@ -91,7 +98,6 @@ var AppRouter = Backbone.Router.extend({
         if ($('#'+page.id).length === 0) {
             $('body').append($(page.el));
         }
-        $(page.el).page().enhanceWithin();
         var transition = $.mobile.defaultPageTransition;
         // We don't want to slide the first page
         if (this.firstPage) {
