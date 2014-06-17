@@ -2,9 +2,8 @@
 
 Based on coenraets [backbone-jquerymobile](https://github.com/ccoenraets/backbone-jquerymobile) project.
 
-# TODO
+# Additional resources
 
-* Turn off jQuery Mobile's DOM caching?
 * Check out: https://github.com/addyosmani/backbone-fundamentals/tree/gh-pages/practicals/todo-jqm-app
 
 # $.mobile.autoInitializePage
