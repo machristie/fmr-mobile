@@ -5,8 +5,6 @@ window.PageView = Backbone.View.extend({
             "data-role" : this.role
         };
     },
-    // Set up listeners, especially to Models
-    startListening: function(){},
     enhance: function() {
         this.$el.page().enhanceWithin();
         return this;
@@ -66,8 +64,6 @@ var AppRouter = Backbone.Router.extend({
         page2: new Page2View()
     },
 
-    prevPage: null,
-
     initialize:function () {
         // Handle back button throughout the application
         $(document).on('click', '.back', function(event) {
@@ -93,7 +89,6 @@ var AppRouter = Backbone.Router.extend({
     },
 
     changePage:function (page) {
-        page.startListening();
         // Render and add page to DOM once
         if ($('#'+page.id).length === 0) {
             $('body').append(page.render().$el);
@@ -108,10 +103,6 @@ var AppRouter = Backbone.Router.extend({
             this.firstPage = false;
         }
         $.mobile.changePage($(page.el), {changeHash:false, transition: transition});
-        if (this.prevPage){
-            this.prevPage.stopListening();
-        }
-        this.prevPage = page;
     }
 
 });

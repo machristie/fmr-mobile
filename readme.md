@@ -23,15 +23,6 @@ That said, I don't know that there is any harm in letting `autoInitializePage`
 left set to `true`.  It will add a dummy page to the DOM but you can ignore it
 (or remove it).
 
-# PageView.startListening
-
-To create new jQuery Mobile pages, extend `PageView` and implement/override
-`startListening`. The way `startListening` should work is that, basically, all
-of the `listenTo` calls you would have made in `initialize` you would put in
-`startListening` instead. `startListening` is called by the Router before
-`$.mobile.changePage` is called on that page. `stopListening` is called on a
-page when transitioning to another page.
-
 # Enhancing the PageView
 
 Whenever `render()` is called, the *page* needs to be re-enhanced.  jQuery
@@ -45,3 +36,29 @@ implement render like so:
         this.enhance(); // See PageView.enhance for details
         return this;
     }
+
+In general, though, re-rendering and re-enhancing the entire page is discouraged
+for performance reasons.
+
+# PageView binding
+
+Pages are not destroyed when navigated away from, instead they are merely
+hidden. This means that they are still bound to models and may re-render, etc.
+For performance reasons you might want to defer rendering until those pages are
+visible again.  Here are some strategies:
+
+1. You could check to see if your page is the current page by checking
+   `$("body").pagecontainer( "getActivePage" )`. If not the active page, then
+   you could store some information that would be used when your page becomes
+   active again. You could listen to the router to know when your page is routed
+   to.
+
+    router.on("route:mypage", function(page) {});
+
+   (Actually, if you are listening to the router, there is no need to make a
+   call to `getActivePage`)
+
+2. When the page isn't active, remove listeners and add them back again when the
+   page is active again.  This only works if you can afford to ignore events in
+   the meantime (e.g., a clock), or you re-render parts of the page that are
+   bound to models.
