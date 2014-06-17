@@ -5,6 +5,8 @@ window.PageView = Backbone.View.extend({
             "data-role" : this.role
         };
     },
+    // `enhance` assumes that view has already been rendered. Most likely this
+    // method is called from `render`
     enhance: function() {
         this.$el.page().enhanceWithin();
         return this;

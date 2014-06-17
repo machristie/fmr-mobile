@@ -59,6 +59,7 @@ visible again.  Here are some strategies:
    call to `getActivePage`)
 
 2. When the page isn't active, remove listeners and add them back again when the
-   page is active again.  This only works if you can afford to ignore events in
-   the meantime (e.g., a clock), or you re-render parts of the page that are
-   bound to models.
+   page is active again.  See #1 for how to figure out when your page is
+   navigated to. This only works if you can afford to ignore events in the
+   meantime (e.g., a clock), or you just re-render the parts of the page that
+   are bound to models.
