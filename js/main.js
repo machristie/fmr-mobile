@@ -104,7 +104,8 @@ var AppRouter = Backbone.Router.extend({
             transition = 'none';
             this.firstPage = false;
         }
-        $.mobile.changePage($(page.el), {changeHash:false, transition: transition});
+        $( ":mobile-pagecontainer" ).pagecontainer( "change", page.$el,
+                { changeHash: false, transition: transition });
     }
 
 });
