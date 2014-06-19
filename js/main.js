@@ -95,17 +95,14 @@ var AppRouter = Backbone.Router.extend({
         if ($('#'+page.id).length === 0) {
             $('body').append(page.render().$el);
         }
-        var transition = $.mobile.defaultPageTransition;
-        // We don't want to slide the first page
         if (this.firstPage) {
             // We turned off $.mobile.autoInitializePage, but now that we've
             // added our first page to the DOM, we can now call initializePage.
             $.mobile.initializePage();
-            transition = 'none';
             this.firstPage = false;
         }
         $( ":mobile-pagecontainer" ).pagecontainer( "change", page.$el,
-                { changeHash: false, transition: transition });
+                { changeHash: false });
     }
 
 });
