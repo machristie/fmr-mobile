@@ -1,12 +1,11 @@
 console.log("In main.js");
 
 require.config({
-    baseUrl: '../bower_components',
     paths: {
-        'jquery': 'jquery/jquery',
-        'underscore': 'underscore/underscore',
-        'backbone': 'backbone/backbone',
-        'jquery-mobile': 'jquery-mobile-bower/js/jquery.mobile-1.4.2'
+        'jquery': '../bower_components/jquery/jquery',
+        'underscore': '../bower_components/underscore/underscore',
+        'backbone': '../bower_components/backbone/backbone',
+        'jquery-mobile': '../bower_components/jquery-mobile-bower/js/jquery.mobile-1.4.2'
     },
     shim: {
 
