@@ -133,20 +133,8 @@ require(['backbone', 'jquery'], function(Backbone, $) {
 
 });
 
-// jQuery Mobile config, needs to be set up before we load jQuery Mobile
-require(['jquery'], function($) {
-    $(document).on("mobileinit", function () {
-        $.mobile.ajaxEnabled = false;
-        $.mobile.linkBindingEnabled = false;
-        $.mobile.hashListeningEnabled = false;
-        $.mobile.pushStateEnabled = false;
-        $.mobile.autoInitializePage = false;
-    });
-});
-
-console.log("Before loading jquery-mobile");
-// Just force jquery-mobile to load
-require(['backbone', 'jquery-mobile', 'jquery'], function(Backbone, jqueryMobile, $) {
+// Force jquery-mobile to load, but load jqm-config first
+require(['backbone', 'jquery', 'jqm-config', 'jquery-mobile'], function(Backbone, $) {
 
     $(document).ready(function () {
         console.log('document ready');
