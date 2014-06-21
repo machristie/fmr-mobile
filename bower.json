@@ -4,7 +4,9 @@
   "dependencies": {
       "backbone": "~1.1",
       "underscore": "~1.6",
-      "jquery-mobile-bower": "~1.4",
+      // Note: jquery-mobile-bower files include the version, so need to update
+      // path in main.js when upgrading
+      "jquery-mobile-bower": "1.4.2",
       "jquery": "~1.10",
       "requirejs": "~2.1",
       "requirejs-text": "~2.0"
