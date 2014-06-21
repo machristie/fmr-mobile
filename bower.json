@@ -6,6 +6,7 @@
       "underscore": "~1.6",
       "jquery-mobile-bower": "~1.4",
       "jquery": "~1.10",
-      "requirejs": "~2.1"
+      "requirejs": "~2.1",
+      "requirejs-text": "~2.0"
   }
 }

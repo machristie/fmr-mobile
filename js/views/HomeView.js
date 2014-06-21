@@ -1,10 +1,10 @@
 
-define(['backbone', 'jquery', 'views/PageView'], function(Backbone, $, PageView) {
+define(['backbone', 'jquery', 'views/PageView', 'text!templates/home.html'], function(Backbone, $, PageView, homeTemplate) {
     var HomeView = PageView.extend({
 
         id: 'home-view',
 
-        template:_.template($('#home').html()),
+        template:_.template(homeTemplate),
 
         render:function (eventName) {
             $(this.el).html(this.template());

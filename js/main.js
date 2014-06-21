@@ -5,7 +5,8 @@ require.config({
         'jquery': '../bower_components/jquery/jquery',
         'underscore': '../bower_components/underscore/underscore',
         'backbone': '../bower_components/backbone/backbone',
-        'jquery-mobile': '../bower_components/jquery-mobile-bower/js/jquery.mobile-1.4.2'
+        'jquery-mobile': '../bower_components/jquery-mobile-bower/js/jquery.mobile-1.4.2',
+        'text': '../bower_components/requirejs-text/text'
     },
     shim: {
 
