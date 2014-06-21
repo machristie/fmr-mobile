@@ -16,12 +16,16 @@ require.config({
         backbone: {
             deps: [ 'underscore', 'jquery' ],
             exports: 'Backbone'
-        }
+        },
+
+        // Load config first
+        'jquery-mobile' : ['jqm-config']
     }
 });
 
-// Force jquery-mobile to load, but load jqm-config first
-require(['backbone', 'jquery', 'routers/router', 'jqm-config', 'jquery-mobile'], function(Backbone, $, Router) {
+require(['jquery-mobile']);
+
+require(['backbone', 'jquery', 'routers/router'], function(Backbone, $, Router) {
 
     $(document).ready(function () {
         console.log('document ready');
