@@ -1,5 +1,6 @@
 
-define(['backbone', 'jquery'], function(Backbone, $) {
+define(['backbone', 'jquery', 'views/HomeView', 'views/Page1View', 'views/Page2View'], 
+        function(Backbone, $, HomeView, Page1View, Page2View) {
     var AppRouter = Backbone.Router.extend({
 
         routes:{
