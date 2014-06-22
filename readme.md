@@ -2,6 +2,12 @@
 
 Based on coenraets [backbone-jquerymobile](https://github.com/ccoenraets/backbone-jquerymobile) project.
 
+# Installing
+
+[Install bower](http://bower.io/), clone this repo, then run
+
+    bower install
+
 # Additional resources
 
 * Check out: https://github.com/addyosmani/backbone-fundamentals/tree/gh-pages/practicals/todo-jqm-app
@@ -52,7 +58,7 @@ visible again.  Here are some strategies:
    active again. You could listen to the router to know when your page is routed
    to.
 
-    router.on("route:mypage", function(page) {});
+       router.on("route:mypage", function(page) {});
 
    (Actually, if you are listening to the router, there is no need to make a
    call to `getActivePage`)
