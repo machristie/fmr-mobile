@@ -3,72 +3,9 @@
 <head>
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+    <link rel="stylesheet" href="bower_components/jquery-mobile-bower/css/jquery.mobile-1.4.2.css" />
 
-    <!-- The Templates -->
-    <script type="text/template" id="home">
-
-        <div data-role="header">
-            <h1>Backbone.js + jQuery Mobile</h1>
-        </div>
-
-        <div class="ui-content" role="main">
-            <h3>Application Template for using Backbone.js and jQuery Mobile.</h3>
-            <p>Backbone.js is used for code organization (Models, Views) and "routing".</p>
-            <p>jQuery Mobile is used for its mobile styles and widgets. The routing and navigation capabilities of jQuery Mobile are disbled to let Backbone.js handle these requirements.</p>
-            <p>This is the Home page. It was created dynamically using an underscore.js template.</p>
-            <p>Navigate to:</p>
-            <ul data-role="listview"  data-inset="true">
-                <li><a href="#page1">Page 1</a></li>
-                <li><a href="#page2">Page 2</a></li>
-            </ul>
-        </div>
-
-    </script>
-
-    <script type="text/template" id="page1">
-
-        <div data-role="header">
-            <a href="#" data-icon="back" class="back ui-btn-left">Back</a>
-            <h1>Page 1</h1>
-        </div>
-
-        <div class="ui-content" role="main">
-            <p>This is Page 1. It was created dynamically using an underscore.js template.</p>
-            <p>Navigate to:</p>
-            <ul data-role="listview" data-inset="true">
-                <li><a href="#">Home</a></li>
-                <li><a href="#page2">Page 2</a></li>
-            </ul>
-        </div>
-
-    </script>
-
-    <script type="text/template" id="page2">
-
-        <div data-role="header">
-            <a href="#" data-icon="back" class="back ui-btn-left">Back</a>
-            <h1>Page 2</h1>
-        </div>
-
-        <div class="ui-content" role="main">
-            <p>This is Page 2. It was created dynamically using an underscore.js template.</p>
-            <p>Navigate to:</p>
-            <ul data-role="listview" data-inset="true">
-                <li><a href="#">Home</a></li>
-                <li><a href="#page1">Page 1</a></li>
-            </ul>
-        </div>
-
-    </script>
-
-    <!-- The Scripts -->
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="js/jqm-config.js"></script>
-    <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.js"></script>
-    <script src="lib/underscore-1.6.0-min.js"></script>
-    <script src="lib/backbone-1.1.2-min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="bower_components/requirejs/require.js" data-main="js/main.js"></script>
 </head>
 
 <body></body>
