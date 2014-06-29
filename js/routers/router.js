@@ -1,18 +1,14 @@
 
-define(['backbone', 'jquery', 'views/HomeView', 'views/Page1View', 'views/Page2View'], 
-        function(Backbone, $, HomeView, Page1View, Page2View) {
+define(['backbone', 'jquery', 'views/MainView'], 
+        function(Backbone, $, HomeView) {
     var AppRouter = Backbone.Router.extend({
 
         routes:{
-            "":"home",
-            "page1":"page1",
-            "page2":"page2"
+            "":"main"
         },
 
         pages: {
-            home: new HomeView(),
-            page1: new Page1View(),
-            page2: new Page2View()
+            main: new MainView()
         },
 
         initialize:function () {
@@ -24,19 +20,8 @@ define(['backbone', 'jquery', 'views/HomeView', 'views/Page1View', 'views/Page2V
             this.firstPage = true;
         },
 
-        home:function () {
-            console.log('#home');
-            this.changePage(this.pages.home);
-        },
-
-        page1:function () {
-            console.log('#page1');
-            this.changePage(this.pages.page1);
-        },
-
-        page2:function () {
-            console.log('#page2');
-            this.changePage(this.pages.page2);
+        main:function () {
+            this.changePage(this.pages.main);
         },
 
         changePage:function (page) {
