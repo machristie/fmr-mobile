@@ -8,6 +8,12 @@ Based on coenraets [backbone-jquerymobile](https://github.com/ccoenraets/backbon
 
     bower install
 
+## Bower Notes
+
+* **Upgrading jQuery Mobile Version**: When upgrading the version of
+  jquery-mobile-bower in `bower.json`, make sure to update the version number in
+  `require.config` in `main.js` as well.
+
 # Additional resources
 
 * Check out: https://github.com/addyosmani/backbone-fundamentals/tree/gh-pages/practicals/todo-jqm-app
