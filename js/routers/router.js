@@ -1,6 +1,6 @@
 
-define(['backbone', 'jquery', 'views/MainView'], 
-        function(Backbone, $, HomeView) {
+define(['backbone', 'jquery', 'views/MainView'],
+        function(Backbone, $, MainView) {
     var AppRouter = Backbone.Router.extend({
 
         routes:{

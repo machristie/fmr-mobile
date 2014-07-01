@@ -7,6 +7,7 @@
       "jquery-mobile-bower": "1.4.2",
       "jquery": "~1.10",
       "requirejs": "~2.1",
-      "requirejs-text": "~2.0"
+      "requirejs-text": "~2.0",
+      "requirejs-promise": "~1.2"
   }
 }
