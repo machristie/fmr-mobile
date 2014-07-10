@@ -1,5 +1,7 @@
 
-define(['models/Position'], function(Position) {
-    var CurrentPosition = new Position();
-    return CurrentPosition;
+define(['backbone'], function(Backbone) {
+    return new Backbone.Model({
+        "coords": null,
+        "timestamp": 0
+    });
 });
