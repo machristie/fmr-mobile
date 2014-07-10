@@ -1,6 +1,6 @@
 
-define(['backbone', 'jquery', 'gmaps', 'views/PageView', 'text!templates/main.html'],
-function(Backbone, $, gmaps, PageView, mainTemplate) {
+define(['backbone', 'jquery', 'gmaps', 'views/PageView', 'models/CurrentPosition', 'text!templates/main.html'],
+function(Backbone, $, gmaps, PageView, CurrentPosition, mainTemplate) {
     'use strict';
 
     var ENTER_KEY = 13;
@@ -12,6 +12,10 @@ function(Backbone, $, gmaps, PageView, mainTemplate) {
 
         events: {
             'keypress #destination': 'loadOnEnter'
+        },
+
+        initialize: function() {
+            this.listenTo(CurrentPosition, 'change', this.positionChange);
         },
 
         render:function (eventName) {
@@ -35,6 +39,10 @@ function(Backbone, $, gmaps, PageView, mainTemplate) {
             console.log("We're going to " + destination.val());
             // TODO: load directions
             // TODO: load gas prices
+        },
+
+        positionChange: function (event){
+            console.log("CurrentPosition is " + CurrentPosition.get('coords').latitude + ", " + CurrentPosition.get('coords').longitude);
         }
 
     });

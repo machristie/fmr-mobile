@@ -1,6 +1,6 @@
 
-define(['backbone', 'jquery', 'views/MainView'],
-        function(Backbone, $, MainView) {
+define(['backbone', 'jquery', 'views/MainView', 'models/CurrentPosition'],
+        function(Backbone, $, MainView, CurrentPosition) {
     var AppRouter = Backbone.Router.extend({
 
         routes:{
@@ -18,6 +18,17 @@ define(['backbone', 'jquery', 'views/MainView'],
                 return false;
             });
             this.firstPage = true;
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(pos){
+                    CurrentPosition.set('coords', pos.coords);
+                    CurrentPosition.set('timestamp', pos.timestamp);
+                }, function(err) {
+                    console.log("Failed to get position");
+                    console.log(err);
+                },
+                {maximumAge: 500000, enableHighAccuracy: true, timeout: 10000}
+                );
+            }
         },
 
         main:function () {
