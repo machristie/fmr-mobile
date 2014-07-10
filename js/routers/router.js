@@ -1,6 +1,7 @@
 
 define(['backbone', 'jquery', 'views/MainView', 'models/CurrentPosition'],
         function(Backbone, $, MainView, CurrentPosition) {
+            "use strict";
     var AppRouter = Backbone.Router.extend({
 
         routes:{
@@ -18,20 +19,12 @@ define(['backbone', 'jquery', 'views/MainView', 'models/CurrentPosition'],
                 return false;
             });
             this.firstPage = true;
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(pos){
-                    CurrentPosition.set('coords', pos.coords);
-                    CurrentPosition.set('timestamp', pos.timestamp);
-                }, function(err) {
-                    console.log("Failed to get position");
-                    console.log(err);
-                },
-                {maximumAge: 500000, enableHighAccuracy: true, timeout: 10000}
-                );
-            }
+            this.watchID = null;
         },
 
         main:function () {
+            // TODO: Do we want to stop watching after a while to conserve battery?
+            this.watchCurrentLocation(true);
             this.changePage(this.pages.main);
         },
 
@@ -48,6 +41,43 @@ define(['backbone', 'jquery', 'views/MainView', 'models/CurrentPosition'],
             }
             $( ":mobile-pagecontainer" ).pagecontainer( "change", page.$el,
                     { changeHash: false });
+        },
+
+        watchCurrentLocation: function (watch) {
+            if (!("geolocation" in navigator)) {
+                return;
+            }
+
+            // Already watching
+            if (watch && this.watchID) {
+                return;
+            }
+
+            // Need to stop watching
+            if (!watch && this.watchID) {
+
+                navigator.geolocation.clearWatch(this.watchID);
+                this.watchID=null;
+                return;
+            }
+
+            if (watch) {
+                this.watchID = navigator.geolocation.watchPosition(
+                    function(pos){
+                        console.log("got position", new Date());
+                        CurrentPosition.set('coords', pos.coords);
+                        CurrentPosition.set('timestamp', pos.timestamp);
+                    },
+                    function(err) {
+                        console.log("Failed to get position", err);
+                    },
+                    {
+                        maximumAge: 500000,
+                        enableHighAccuracy: true,
+                        timeout: 10000
+                    }
+                );
+            }
         }
 
     });
