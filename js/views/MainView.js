@@ -1,25 +1,23 @@
 
-define(['backbone', 'jquery', 'gmaps', 'views/PageView', 'models/CurrentPosition', 'text!templates/main.html'],
-function(Backbone, $, gmaps, PageView, CurrentPosition, mainTemplate) {
+define(['backbone', 'jquery', 'gmaps', 'views/PageView', 'views/RouteEditor', 'models/CurrentRoute', 'models/CurrentPosition', 'text!templates/main.html'],
+function(Backbone, $, gmaps, PageView, RouteEditor, CurrentRoute, CurrentPosition, mainTemplate) {
     'use strict';
 
-    var ENTER_KEY = 13;
     var MainView = PageView.extend({
 
         id: 'main-view',
 
         template:_.template(mainTemplate),
 
-        events: {
-            'keypress #destination': 'loadOnEnter'
-        },
-
         initialize: function() {
             this.listenTo(CurrentPosition, 'change', this.positionChange);
+            this.routeEditor = new RouteEditor({model: CurrentRoute});
+            this.listenTo(this.routeEditor, 'submit', this.currentRouteSubmitted);
         },
 
         render:function (eventName) {
-            $(this.el).html(this.template());
+            this.$el.html(this.template());
+            this.$('div[data-role="header"]').append(this.routeEditor.render().el);
             var myOptions = {
               zoom: 10,
               center: new gmaps.LatLng(-34.397, 150.644),
@@ -30,19 +28,12 @@ function(Backbone, $, gmaps, PageView, CurrentPosition, mainTemplate) {
             return this;
         },
 
-        loadOnEnter: function( event ){
-            var destination = this.$("#destination");
-            if (event.which !== ENTER_KEY || !destination.val().trim() === "" ) {
-                return;
-            }
-
-            console.log("We're going to " + destination.val());
-            // TODO: load directions
-            // TODO: load gas prices
-        },
-
         positionChange: function (event){
             console.log("CurrentPosition is " + CurrentPosition.get('coords').latitude + ", " + CurrentPosition.get('coords').longitude);
+        },
+
+        currentRouteSubmitted: function (event) {
+            console.log("Route submitted: ", CurrentRoute.attributes);
         }
 
     });
