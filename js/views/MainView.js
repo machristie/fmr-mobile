@@ -10,9 +10,10 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentRoute, CurrentPositio
         template:_.template(mainTemplate),
 
         initialize: function() {
-            this.listenTo(CurrentPosition, 'change', this.positionChange);
             this.routeEditor = new RouteEditor({model: CurrentRoute});
             this.listenTo(this.routeEditor, 'submit', this.currentRouteSubmitted);
+            this.directionsService = new gmaps.DirectionsService();
+            this.directionsDisplay = new gmaps.DirectionsRenderer();
         },
 
         render:function (eventName) {
@@ -24,16 +25,33 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentRoute, CurrentPositio
               mapTypeId: gmaps.MapTypeId.ROADMAP
             };
             var map = new gmaps.Map(this.$('#map-canvas').get(0), myOptions);
+            this.directionsDisplay.setMap(map);
             this.enhance();
             return this;
         },
 
-        positionChange: function (event){
-            console.log("CurrentPosition is " + CurrentPosition.get('coords').latitude + ", " + CurrentPosition.get('coords').longitude);
-        },
-
         currentRouteSubmitted: function (event) {
             console.log("Route submitted: ", CurrentRoute.attributes);
+            var directionsRequest = {};
+            if (CurrentRoute.get('useCurrentLocation')) {
+                directionsRequest.origin = new gmaps.LatLng(
+                        CurrentPosition.get('coords').latitude,
+                        CurrentPosition.get('coords').longitude);
+            } else {
+                directionsRequest.origin = CurrentRoute.get('start');
+            }
+            directionsRequest.destination = CurrentRoute.get('destination');
+            directionsRequest.travelMode = gmaps.TravelMode.DRIVING;
+            directionsRequest.unitSystem = gmaps.UnitSystem.IMPERIAL;
+
+            var self = this;
+            this.directionsService.route(directionsRequest, function(result, status){
+                console.log(result, status);
+                // TODO: handle failure
+                if (status == gmaps.DirectionsStatus.OK){
+                    self.directionsDisplay.setDirections(result);
+                }
+            });
         }
 
     });
