@@ -1,6 +1,6 @@
 
-define(['backbone', 'jquery', 'gmaps', 'views/PageView', 'views/RouteEditor', 'models/CurrentRoute', 'models/CurrentPosition', 'text!templates/main.html'],
-function(Backbone, $, gmaps, PageView, RouteEditor, CurrentRoute, CurrentPosition, mainTemplate) {
+define(['backbone', 'jquery', 'gmaps', 'views/PageView', 'views/RouteEditor', 'models/CurrentPosition', 'text!templates/main.html'],
+function(Backbone, $, gmaps, PageView, RouteEditor, CurrentPosition, mainTemplate) {
     'use strict';
 
     var MainView = PageView.extend({
@@ -10,8 +10,8 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentRoute, CurrentPositio
         template:_.template(mainTemplate),
 
         initialize: function() {
-            this.routeEditor = new RouteEditor({model: CurrentRoute});
-            this.listenTo(this.routeEditor, 'submit', this.currentRouteSubmitted);
+            this.routeEditor = new RouteEditor({model: this.model});
+            this.listenTo(this.model, 'change', this.routeChanged);
             this.directionsService = new gmaps.DirectionsService();
             this.directionsDisplay = new gmaps.DirectionsRenderer();
         },
@@ -30,17 +30,16 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentRoute, CurrentPositio
             return this;
         },
 
-        currentRouteSubmitted: function (event) {
-            console.log("Route submitted: ", CurrentRoute.attributes);
+        routeChanged: function (event) {
             var directionsRequest = {};
-            if (CurrentRoute.get('useCurrentLocation')) {
+            if (this.model.get('useCurrentLocation')) {
                 directionsRequest.origin = new gmaps.LatLng(
                         CurrentPosition.get('coords').latitude,
                         CurrentPosition.get('coords').longitude);
             } else {
-                directionsRequest.origin = CurrentRoute.get('start');
+                directionsRequest.origin = this.model.get('start');
             }
-            directionsRequest.destination = CurrentRoute.get('destination');
+            directionsRequest.destination = this.model.get('destination');
             directionsRequest.travelMode = gmaps.TravelMode.DRIVING;
             directionsRequest.unitSystem = gmaps.UnitSystem.IMPERIAL;
 

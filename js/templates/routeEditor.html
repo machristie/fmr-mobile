@@ -1,9 +1,9 @@
 <div id="route-start-row">
-    <% if (!useCurrentLocation) { %>
-    <label for="start" class="ui-hidden-accessible">Enter Start:</label>
-    <input name="start" id="start" value="<%= start ? start : '' %>"
-      placeholder="Enter Start" type="text" data-clear-btn="true">
-    <% } %>
+    <div id="start-input">
+      <label for="start" class="ui-hidden-accessible">Enter Start:</label>
+      <input name="start" id="start" value="<%= start ? start : '' %>"
+        placeholder="Enter Start" type="text" data-clear-btn="true">
+    </div>
     <input name="use-current-location-checkbox"
       id="use-current-location-checkbox"
       data-mini="true" type="checkbox" <%= useCurrentLocation ? 'checked="checked"' : '' %> />

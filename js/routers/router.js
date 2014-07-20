@@ -1,6 +1,6 @@
 
-define(['backbone', 'jquery', 'views/MainView', 'models/CurrentPosition'],
-        function(Backbone, $, MainView, CurrentPosition) {
+define(['backbone', 'jquery', 'views/MainView', 'models/Route', 'models/CurrentPosition'],
+        function(Backbone, $, MainView, Route, CurrentPosition) {
             "use strict";
     var AppRouter = Backbone.Router.extend({
 
@@ -8,9 +8,10 @@ define(['backbone', 'jquery', 'views/MainView', 'models/CurrentPosition'],
             "":"main"
         },
 
-        pages: {
-            main: new MainView()
-        },
+        currentRoute: new Route(),
+
+        // Cache and reuse pages
+        pages: {},
 
         initialize:function () {
             // Handle back button throughout the application
@@ -20,6 +21,7 @@ define(['backbone', 'jquery', 'views/MainView', 'models/CurrentPosition'],
             });
             this.firstPage = true;
             this.watchID = null;
+            this.pages.main = new MainView({model: this.currentRoute});
         },
 
         main:function () {
@@ -64,7 +66,7 @@ define(['backbone', 'jquery', 'views/MainView', 'models/CurrentPosition'],
             if (watch) {
                 this.watchID = navigator.geolocation.watchPosition(
                     function(pos){
-                        console.log("got position", new Date());
+                        console.log("got position", pos, new Date());
                         CurrentPosition.set('coords', pos.coords);
                         CurrentPosition.set('timestamp', pos.timestamp);
                     },

@@ -17,21 +17,21 @@ function(Backbone, CurrentPosition, routeEditorTemplate) {
         },
 
         initialize: function() {
-            this.listenTo(CurrentPosition, 'change', this.positionChange);
             this.listenTo(this.model, 'change', this.render);
         },
 
         render:function (eventName) {
             console.log("RouteEditor.render", this.model);
             this.$el.html(this.template(this.model.attributes));
+            this.toggleUseCurrentLocation();
             this.$el.trigger( "create" );
             return this;
         },
 
         toggleUseCurrentLocation: function( event ){
 
-            console.log("toggleUseCurrentLocation", event);
-            this.model.set('useCurrentLocation', !this.model.get('useCurrentLocation'));
+            var showStartInput = !this.getUseCurrentLocationChecked();
+            this.$('#start-input').toggle(showStartInput);
         },
 
         submitOnEnter: function( event ){
@@ -54,22 +54,25 @@ function(Backbone, CurrentPosition, routeEditorTemplate) {
         },
 
         doSubmit: function(start, destination){
-            if (this.model.get('useCurrentLocation')) {
+            var useCurrentLocation = this.getUseCurrentLocationChecked();
+            if (useCurrentLocation) {
                 this.model.set({
+                    'useCurrentLocation': useCurrentLocation,
                     'start': null,
                     'destination': destination.val().trim()
                 });
             } else {
                 this.model.set({
+                    'useCurrentLocation': useCurrentLocation,
                     'start': start.val().trim(),
                     'destination': destination.val().trim()
                 });
             }
-            this.trigger("submit");
+            console.log("Set route to ", this.model.attributes);
         },
 
-        positionChange: function (event){
-            console.log("CurrentPosition is " + CurrentPosition.get('coords').latitude + ", " + CurrentPosition.get('coords').longitude);
+        getUseCurrentLocationChecked: function() {
+            return this.$('#use-current-location-checkbox:checked').length === 1;
         }
 
     });
