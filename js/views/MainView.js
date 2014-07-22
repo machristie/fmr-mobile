@@ -43,13 +43,33 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentPosition, mainTemplat
             directionsRequest.travelMode = gmaps.TravelMode.DRIVING;
             directionsRequest.unitSystem = gmaps.UnitSystem.IMPERIAL;
 
+            // TODO: use _.bind instead of self
             var self = this;
             this.directionsService.route(directionsRequest, function(result, status){
                 console.log(result, status);
                 // TODO: handle failure
                 if (status == gmaps.DirectionsStatus.OK){
                     self.directionsDisplay.setDirections(result);
+                    self.loadGasPrices(result);
                 }
+            });
+        },
+
+        loadGasPrices: function(directionsResult) {
+            var request = $.ajax({
+                type: "POST",
+                url: "/v2/get_cheapest_gas_prices",
+                data: {
+                    "route": directionsResult.routes[0].overview_polyline,
+                    "gas_grade": "R",
+                    "radius": "1609.344"
+                }
+            });
+            request.done(function(data){
+                console.log("gas price data", data);
+            });
+            request.fail(function(jqXHR, textStatus){
+                console.log("Request failed:", textStatus);
             });
         }
 
