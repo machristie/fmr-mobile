@@ -12,6 +12,7 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentPosition, mainTemplat
         initialize: function() {
             this.routeEditor = new RouteEditor({model: this.model});
             this.listenTo(this.model, 'change', this.routeChanged);
+            this.listenTo(this.model.gasPrices, 'reset', this.gasPricesLoaded);
             this.directionsService = new gmaps.DirectionsService();
             this.directionsDisplay = new gmaps.DirectionsRenderer();
         },
@@ -22,10 +23,11 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentPosition, mainTemplat
             var myOptions = {
               zoom: 10,
               center: new gmaps.LatLng(-34.397, 150.644),
-              mapTypeId: gmaps.MapTypeId.ROADMAP
+              mapTypeId: gmaps.MapTypeId.ROADMAP,
+              scaleControl: true
             };
-            var map = new gmaps.Map(this.$('#map-canvas').get(0), myOptions);
-            this.directionsDisplay.setMap(map);
+            this.map = new gmaps.Map(this.$('#map-canvas').get(0), myOptions);
+            this.directionsDisplay.setMap(this.map);
             this.enhance();
             return this;
         },
@@ -43,36 +45,29 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentPosition, mainTemplat
             directionsRequest.travelMode = gmaps.TravelMode.DRIVING;
             directionsRequest.unitSystem = gmaps.UnitSystem.IMPERIAL;
 
-            // TODO: use _.bind instead of self
-            var self = this;
-            this.directionsService.route(directionsRequest, function(result, status){
+            this.directionsService.route(directionsRequest, _.bind( function(result, status){
                 console.log(result, status);
                 // TODO: handle failure
                 if (status == gmaps.DirectionsStatus.OK){
-                    self.directionsDisplay.setDirections(result);
-                    self.loadGasPrices(result);
+                    this.directionsDisplay.setDirections(result);
+                    console.log("calling loadGasPrices now...");
+                    this.model.loadGasPrices(result);
                 }
-            });
+            }, this ) );
         },
 
-        loadGasPrices: function(directionsResult) {
-            var request = $.ajax({
-                type: "POST",
-                url: "/v2/get_cheapest_gas_prices",
-                data: {
-                    "route": directionsResult.routes[0].overview_polyline,
-                    "gas_grade": "R",
-                    "radius": "1609.344"
-                }
-            });
-            request.done(function(data){
-                console.log("gas price data", data);
-            });
-            request.fail(function(jqXHR, textStatus){
-                console.log("Request failed:", textStatus);
-            });
-        }
+        gasPricesLoaded: function(eventName) {
 
+            // TODO: we need to keep track of markers that are added and remove
+            // the old markers when new gas prices are loaded
+            this.model.gasPrices.forEach(function(gasPrice){
+                var marker = new google.maps.Marker({
+                    position: new gmaps.LatLng(gasPrice.get('lat'), gasPrice.get('lon')),
+                    map: this.map,
+                    title: gasPrice.get('price')
+                });
+            }, this);
+        }
     });
 
     return MainView;
