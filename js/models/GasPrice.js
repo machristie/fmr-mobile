@@ -9,6 +9,7 @@ define(['backbone'], function(Backbone) {
             grade: null,
             lat: null,
             lon: null,
+            // TODO: price is type String
             price: null,
             price_id: null,
             state: null,

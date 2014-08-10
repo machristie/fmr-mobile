@@ -61,10 +61,14 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentPosition, mainTemplat
             // TODO: we need to keep track of markers that are added and remove
             // the old markers when new gas prices are loaded
             this.model.gasPrices.forEach(function(gasPrice){
+
+                var priceText = "$" + new Number(gasPrice.get('price')).toFixed(2);
                 var marker = new google.maps.Marker({
                     position: new gmaps.LatLng(gasPrice.get('lat'), gasPrice.get('lon')),
                     map: this.map,
-                    title: gasPrice.get('price')
+                    // TODO: set the color based on statistics
+                    icon: '/marker?price=' + priceText,
+                    title: priceText
                 });
             }, this);
         }
