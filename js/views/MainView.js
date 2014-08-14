@@ -3,6 +3,12 @@ define(['backbone', 'jquery', 'gmaps', 'views/PageView', 'views/RouteEditor', 'm
 function(Backbone, $, gmaps, PageView, RouteEditor, CurrentPosition, mainTemplate) {
     'use strict';
 
+    var MARKER_RANK_COLORS = [
+        'green',        // lowest
+        'greenyellow',  // below average
+        'yellow',       // slightly below average
+        'grey'          // at or above average
+    ];
     var MainView = PageView.extend({
 
         id: 'main-view',
@@ -46,11 +52,9 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentPosition, mainTemplat
             directionsRequest.unitSystem = gmaps.UnitSystem.IMPERIAL;
 
             this.directionsService.route(directionsRequest, _.bind( function(result, status){
-                console.log(result, status);
                 // TODO: handle failure
                 if (status == gmaps.DirectionsStatus.OK){
                     this.directionsDisplay.setDirections(result);
-                    console.log("calling loadGasPrices now...");
                     this.model.loadGasPrices(result);
                 }
             }, this ) );
@@ -58,19 +62,32 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentPosition, mainTemplat
 
         gasPricesLoaded: function(eventName) {
 
+            var stats = this.model.gasPrices.stats();
             // TODO: we need to keep track of markers that are added and remove
             // the old markers when new gas prices are loaded
             this.model.gasPrices.forEach(function(gasPrice){
 
-                var priceText = "$" + new Number(gasPrice.get('price')).toFixed(2);
+                var priceText = "$" + gasPrice.get('price').toFixed(2);
+                var rank = this._gasPriceRank(gasPrice, stats);
+                var color = MARKER_RANK_COLORS[rank];
                 var marker = new google.maps.Marker({
                     position: new gmaps.LatLng(gasPrice.get('lat'), gasPrice.get('lon')),
                     map: this.map,
-                    // TODO: set the color based on statistics
-                    icon: '/marker?price=' + priceText,
+                    icon: '/marker?price=' + priceText + "&color=" + color,
                     title: priceText
                 });
             }, this);
+        },
+
+        _gasPriceRank: function(gasPrice, stats) {
+            var rank = -1;
+            var price = gasPrice.get('price');
+            if (price >= stats.average) {
+                rank = 3;
+            } else {
+                rank = Math.floor(3*(price - stats.minimum)/(stats.average - stats.minimum));
+            }
+            return rank;
         }
     });
 

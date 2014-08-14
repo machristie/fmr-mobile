@@ -12,6 +12,7 @@ define(['backbone', 'collections/GasPrices'], function(Backbone, GasPrices) {
         loadGasPrices: function(directionsResult) {
 
             console.log("In loadGasPrices");
+            // TODO: include maxAge as a parameter
             this.gasPrices.fetch({
                 reset: true,
                 data: {

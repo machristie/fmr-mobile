@@ -1,5 +1,7 @@
 
 define(['backbone'], function(Backbone) {
+    "use strict";
+
     var GasPrice = Backbone.Model.extend({
         idAttribute: "price_id",
         defaults: {
@@ -9,7 +11,6 @@ define(['backbone'], function(Backbone) {
             grade: null,
             lat: null,
             lon: null,
-            // TODO: price is type String
             price: null,
             price_id: null,
             state: null,
@@ -18,6 +19,11 @@ define(['backbone'], function(Backbone) {
             street_address: null,
             updated_date: null,
             zipcode: null
+        },
+        parse: function(response, options){
+            // 'price' is a string, convert to Number
+            response.price = Number(response.price);
+            return response;
         }
     });
     return GasPrice;
