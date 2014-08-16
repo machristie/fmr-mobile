@@ -1,6 +1,6 @@
 
-define(['backbone', 'jquery', 'gmaps', 'views/PageView', 'views/RouteEditor', 'models/CurrentPosition', 'text!templates/main.html'],
-function(Backbone, $, gmaps, PageView, RouteEditor, CurrentPosition, mainTemplate) {
+define(['backbone', 'underscore', 'jquery', 'gmaps', 'views/PageView', 'views/RouteEditor', 'views/GasPriceInfoWindow', 'models/CurrentPosition', 'text!templates/main.html'],
+function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, CurrentPosition, mainTemplate) {
     'use strict';
 
     var MARKER_RANK_COLORS = [
@@ -21,6 +21,10 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentPosition, mainTemplat
             this.listenTo(this.model.gasPrices, 'reset', this.gasPricesLoaded);
             this.directionsService = new gmaps.DirectionsService();
             this.directionsDisplay = new gmaps.DirectionsRenderer();
+            this.infoWindowView = new GasPriceInfoWindow();
+            this.infoWindow = new gmaps.InfoWindow({
+                content: this.infoWindowView.el
+            });
         },
 
         render:function (eventName) {
@@ -70,12 +74,17 @@ function(Backbone, $, gmaps, PageView, RouteEditor, CurrentPosition, mainTemplat
                 var priceText = "$" + gasPrice.get('price').toFixed(2);
                 var rank = this._gasPriceRank(gasPrice, stats);
                 var color = MARKER_RANK_COLORS[rank];
-                var marker = new google.maps.Marker({
+                var marker = new gmaps.Marker({
                     position: new gmaps.LatLng(gasPrice.get('lat'), gasPrice.get('lon')),
                     map: this.map,
                     icon: '/marker?price=' + priceText + "&color=" + color,
                     title: priceText
                 });
+                gmaps.event.addListener(marker, "click", _.bind( function() {
+                    this.infoWindowView.model = gasPrice;
+                    this.infoWindowView.render();
+                    this.infoWindow.open(this.map, marker);
+                }, this ) );
             }, this);
         },
 

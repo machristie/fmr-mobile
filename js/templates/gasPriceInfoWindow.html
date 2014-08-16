@@ -1,0 +1,19 @@
+<div class="gas-price">
+    <p class="price">$<%= price.toFixed(2) %></p>
+    <p class="grade"><%= gradeText %></p>
+</div>
+<div class="station">
+    <p class="gas-brand">
+        <% if (brand_name) { %>
+        <%= brand_name %>
+        <% } else { %>
+        <span class="unknown-brand">N/A</span>
+        <% } %>
+    </p>
+    <p class="station-name"><%= station_name %></p>
+    <p><%= street_address %></p>
+    <p><%= city + ", " + state %></p>
+</div>
+<div class="updated-time">
+    <p>Updated <%= updated_date %></p>
+</div>
