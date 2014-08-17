@@ -3,3 +3,67 @@ html, body, #map-canvas, div[data-role="page"] {
   margin: 0px;
   padding: 0px
 }
+
+/*
+ * Gas price info windows
+ */
+#gas-price-info-window {
+    width: 300px;
+    margin: 0.2em;
+}
+#gas-price-info-window p {
+  font-style: normal;
+  margin-top: 0;
+  margin-bottom: .2em;
+  font-size: 70%;
+  text-align: left;
+  text-shadow: none;
+}
+#gas-price-info-window .gas-price, #gas-price-info-window .station {
+  float: left;
+  padding: .2em;
+  margin-right: .3em;
+  margin-bottom: .3em;
+}
+
+/* Gas price rank coloring */
+#gas-price-info-window.lowest-prices .gas-price {
+  background-color: #00CC00;
+}
+#gas-price-info-window.below-average-prices .gas-price {
+  background-color: #CCFF00;
+}
+#gas-price-info-window.slightly-below-average-prices .gas-price {
+  background-color: #FFFF33;
+}
+#gas-price-info-window.above-average-prices .gas-price {
+  background-color: #CCCCCC;
+}
+
+#gas-price-info-window .gas-price {
+  width: 70px;
+  border: 1px solid black;
+}
+#gas-price-info-window .station {
+  width: 200px;
+}
+#gas-price-info-window .gas-price .price {
+  font-size: 150%;
+}
+#gas-price-info-window .gas-price p {
+  text-align: center;
+}
+#gas-price-info-window .station p {
+  text-align: left;
+}
+#gas-price-info-window .station .gas-brand,
+#gas-price-info-window .station .station-name {
+  font-weight: bold;
+}
+/* Only bold station-name when there isn't a gas-brand */
+#gas-price-info-window .station .gas-brand + .station-name {
+  font-weight: inherit;
+}
+#gas-price-info-window .updated-time {
+  clear: both;
+}

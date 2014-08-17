@@ -9,6 +9,13 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
         'yellow',       // slightly below average
         'grey'          // at or above average
     ];
+
+    var RANK_CLASS_MAPPING = [
+        'lowest-prices',
+        'below-average-prices',
+        'slightly-below-average-prices',
+        'above-average-prices'
+    ];
     var MainView = PageView.extend({
 
         id: 'main-view',
@@ -78,6 +85,7 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
                     title: priceText
                 });
                 gmaps.event.addListener(marker, "click", _.bind( function() {
+                    this.infoWindowView.className = RANK_CLASS_MAPPING[rank];
                     this.infoWindowView.open(gasPrice, this.map, marker);
                 }, this ) );
             }, this);

@@ -23,6 +23,8 @@ define(['backbone'], function(Backbone) {
         parse: function(response, options){
             // 'price' is a string, convert to Number
             response.price = Number(response.price);
+            // 'updated_date' is in ISO-8601 format
+            response.updated_date = new Date(response.updated_date);
             return response;
         }
     });
