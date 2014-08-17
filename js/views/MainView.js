@@ -22,9 +22,6 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
             this.directionsService = new gmaps.DirectionsService();
             this.directionsDisplay = new gmaps.DirectionsRenderer();
             this.infoWindowView = new GasPriceInfoWindow();
-            this.infoWindow = new gmaps.InfoWindow({
-                content: this.infoWindowView.el
-            });
         },
 
         render:function (eventName) {
@@ -81,9 +78,7 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
                     title: priceText
                 });
                 gmaps.event.addListener(marker, "click", _.bind( function() {
-                    this.infoWindowView.model = gasPrice;
-                    this.infoWindowView.render();
-                    this.infoWindow.open(this.map, marker);
+                    this.infoWindowView.open(gasPrice, this.map, marker);
                 }, this ) );
             }, this);
         },

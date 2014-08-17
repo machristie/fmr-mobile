@@ -1,6 +1,6 @@
 
-define(['backbone', 'underscore', 'text!templates/gasPriceInfoWindow.html'],
-function(Backbone, _, template) {
+define(['backbone', 'underscore', 'gmaps', 'text!templates/gasPriceInfoWindow.html'],
+function(Backbone, _, gmaps, template) {
     'use strict';
 
     var GAS_GRADE_TEXT = {
@@ -18,6 +18,9 @@ function(Backbone, _, template) {
         template: _.template(template),
 
         initialize: function() {
+            this.infoWindow = new gmaps.InfoWindow({
+                content: this.el
+            });
         },
 
         render:function (eventName) {
@@ -27,8 +30,13 @@ function(Backbone, _, template) {
             // TODO: thinking about not displaying N/A when gas price isn't known
             this.$el.html(this.template(templateData));
             return this;
-        }
+        },
 
+        open: function(model, map, marker) {
+            this.model = model;
+            this.render();
+            this.infoWindow.open(map, marker);
+        }
     });
 
     return GasPriceInfoWindow;
