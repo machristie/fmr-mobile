@@ -1,5 +1,5 @@
 
-define(['backbone', 'jquery'], function(Backbone, $) {
+define(['backbone', 'jquery', 'jquery-mobile'], function(Backbone, $) {
 
     var PageView = Backbone.View.extend({
         role: "page",

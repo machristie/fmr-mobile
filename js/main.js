@@ -31,8 +31,6 @@ define('gmaps', ['promise!libs/gmaps-loader'], function(gmaps) {
   return gmaps;
 });
 
-require(['jquery-mobile']);
-
 require(['backbone', 'jquery', 'routers/router'], function(Backbone, $, Router) {
 
     $(document).ready(function () {
