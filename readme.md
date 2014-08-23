@@ -17,3 +17,14 @@ jQuery Mobile website for [FuelMyRoute](http://fuelmyroute.com).
 # Additional resources
 
 * Uses https://github.com/machristie/backbone-jquerymobile as a starting template
+
+# Post-update hook
+
+    #!/bin/sh
+
+    cd $HOME/dev/fmr-mobile || exit
+    unset GIT_DIR
+    git pull origin master
+    ./build.sh
+
+Credit goes to http://danbarber.me/using-git-for-deployment/ for inspiration.
