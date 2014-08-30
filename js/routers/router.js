@@ -1,11 +1,13 @@
 
-define(['backbone', 'jquery', 'views/MainView', 'models/Route', 'models/CurrentPosition'],
-        function(Backbone, $, MainView, Route, CurrentPosition) {
+define(['backbone', 'jquery', 'views/MainView', 'views/EditRoutePage', 'models/Route', 'models/CurrentPosition'],
+        function(Backbone, $, MainView, EditRoutePage, Route, CurrentPosition) {
             "use strict";
     var AppRouter = Backbone.Router.extend({
 
         routes:{
-            "":"main"
+            "":"edit",
+            "map":"main",
+            "edit":"edit"
         },
 
         currentRoute: new Route(),
@@ -21,13 +23,22 @@ define(['backbone', 'jquery', 'views/MainView', 'models/Route', 'models/CurrentP
             });
             this.firstPage = true;
             this.watchID = null;
-            this.pages.main = new MainView({model: this.currentRoute});
+            this.pages = {
+                main: new MainView({model: this.currentRoute}),
+                editRoute: new EditRoutePage({model: this.currentRoute})
+            };
+            this.listenTo(this.pages.editRoute, "routeEditSubmitted", this.routeEditSubmitted);
         },
 
         main:function () {
             // TODO: Do we want to stop watching after a while to conserve battery?
             this.watchCurrentLocation(true);
             this.changePage(this.pages.main);
+        },
+
+        edit: function() {
+            this.watchCurrentLocation(true);
+            this.changePage(this.pages.editRoute);
         },
 
         changePage:function (page) {
@@ -80,6 +91,10 @@ define(['backbone', 'jquery', 'views/MainView', 'models/Route', 'models/CurrentP
                     }
                 );
             }
+        },
+
+        routeEditSubmitted: function(event) {
+            this.navigate("map", {trigger: true});
         }
 
     });
