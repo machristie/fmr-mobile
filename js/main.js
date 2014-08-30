@@ -16,10 +16,7 @@ require.config({
         backbone: {
             deps: [ 'underscore', 'jquery' ],
             exports: 'Backbone'
-        },
-
-        // Load config first
-        'jquery-mobile' : ['jqm-config']
+        }
     }
 });
 
@@ -29,7 +26,11 @@ define('gmaps', ['promise!libs/gmaps-loader'], function(gmaps) {
   return gmaps;
 });
 
-require(['backbone', 'jquery', 'routers/router'], function(Backbone, $, Router) {
+// Require jqm-config before loading any JQM views (which router depends on).
+// Trying to specify the dependency between jquery-mobile and jqm-config as a
+// shim WON'T WORK. See https://github.com/jrburke/requirejs/issues/358 for
+// more info.
+require(['backbone', 'jquery', 'jqm-config', 'routers/router'], function(Backbone, $, config, Router) {
 
     $(document).ready(function () {
         console.log('document ready');
