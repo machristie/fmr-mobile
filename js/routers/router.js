@@ -6,7 +6,7 @@ define(['backbone', 'jquery', 'views/MainView', 'views/EditRoutePage', 'models/R
 
         routes:{
             "":"edit",
-            "map":"main",
+            "map/:destination(/:start)":"main",
             "edit":"edit"
         },
 
@@ -30,7 +30,13 @@ define(['backbone', 'jquery', 'views/MainView', 'views/EditRoutePage', 'models/R
             this.listenTo(this.pages.editRoute, "routeEditSubmitted", this.routeEditSubmitted);
         },
 
-        main:function () {
+        main:function (destination, start) {
+            // update currentRoute based on given destination and start
+            this.currentRoute.set({
+                'start': start,
+                'destination': destination,
+                'useCurrentLocation': (start == null)
+            });
             // TODO: Do we want to stop watching after a while to conserve battery?
             this.watchCurrentLocation(true);
             this.changePage(this.pages.main);
@@ -94,7 +100,11 @@ define(['backbone', 'jquery', 'views/MainView', 'views/EditRoutePage', 'models/R
         },
 
         routeEditSubmitted: function(event) {
-            this.navigate("map", {trigger: true});
+            var fragment = "map/" + encodeURIComponent(this.currentRoute.get('destination'));
+            if (this.currentRoute.get('start')){
+                fragment += "/" + encodeURIComponent(this.currentRoute.get('start'));
+            }
+            this.navigate(fragment, {trigger: true});
         }
 
     });
