@@ -1,5 +1,3 @@
-console.log("In main.js");
-
 require.config({
     paths: {
         'jquery': '../bower_components/jquery/jquery',
