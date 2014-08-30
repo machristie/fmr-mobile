@@ -2,6 +2,8 @@
 
 html, body, #map-canvas, div[data-role="page"] {
   height: 100%;
+  /* setting width to 100% is important to get google maps to expand to full width */
+  width: 100%;
   margin: 0px;
   padding: 0px
 }
