@@ -13,7 +13,10 @@ define(['backbone', 'jquery', 'jquery-mobile'], function(Backbone, $) {
         enhance: function() {
             this.$el.page().enhanceWithin();
             return this;
-        }
+        },
+
+        // Override to add logic to execute on 'pagecontainershow'
+        show: function(event, ui) {}
     });
 
     return PageView;

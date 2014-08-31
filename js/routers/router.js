@@ -28,6 +28,17 @@ define(['backbone', 'jquery', 'views/MainView', 'views/EditRoutePage', 'models/R
                 editRoute: new EditRoutePage({model: this.currentRoute})
             };
             this.listenTo(this.pages.editRoute, "routeEditSubmitted", this.routeEditSubmitted);
+            $(document).on( "pagecontainershow", _.bind(function( event, ui ) {
+                // TODO: factor this out into a separate method
+                // Figure out what page we are showing and call 'PageView.show' on it
+                // TODO: JQM 1.4.3 has ui.toPage, which would be preferred to getActivePage
+                var activePage = $( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" );
+                _.each(this.pages, function(page) {
+                    if( activePage.get(0) === page.el ){
+                        page.show(event, ui);
+                    }
+                });
+            }, this));
         },
 
         main:function (destination, start) {
