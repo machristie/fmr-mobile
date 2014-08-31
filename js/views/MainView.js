@@ -24,7 +24,6 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
 
         initialize: function() {
             this.routeEditor = new RouteEditor({model: this.model});
-            this.listenTo(this.model, 'change', this.routeChanged);
             this.listenTo(this.model.gasPrices, 'reset', this.gasPricesLoaded);
             this.directionsService = new gmaps.DirectionsService();
             this.directionsDisplay = new gmaps.DirectionsRenderer();
@@ -34,6 +33,22 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
         render:function (eventName) {
             this.$el.html(this.template());
             this.$('div[data-role="header"]').append(this.routeEditor.render().el);
+            this.initializeMap();
+            this.enhance();
+            return this;
+        },
+
+        show: function (event, ui) {
+            // Resize the map to fill available width http://stackoverflow.com/a/11308528
+            gmaps.event.trigger(this.map, 'resize');
+
+            // Don't try to draw or move the map until page is shown
+            // ASSUMPTION: this page isn't shown/routed to unless there is a
+            // Route defined (with at least a destination)
+            this.loadDirectionsAndGasPrices();
+        },
+
+        initializeMap: function () {
             var myOptions = {
               zoom: 10,
               center: new gmaps.LatLng(-34.397, 150.644),
@@ -42,11 +57,9 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
             };
             this.map = new gmaps.Map(this.$('#map-canvas').get(0), myOptions);
             this.directionsDisplay.setMap(this.map);
-            this.enhance();
-            return this;
         },
 
-        routeChanged: function (event) {
+        loadDirectionsAndGasPrices: function (event) {
             var directionsRequest = {};
             if (this.model.get('useCurrentLocation')) {
                 directionsRequest.origin = new gmaps.LatLng(
