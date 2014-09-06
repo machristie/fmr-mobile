@@ -1,6 +1,7 @@
 
 define(['backbone', 'collections/GasPrices'], function(Backbone, GasPrices) {
     var Route = Backbone.Model.extend({
+        // TODO: deprecate useCurrentLocation
         defaults: {
             'useCurrentLocation': true,
             'destination': null,

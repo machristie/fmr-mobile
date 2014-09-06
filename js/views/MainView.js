@@ -45,7 +45,16 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
             // Don't try to draw or move the map until page is shown
             // ASSUMPTION: this page isn't shown/routed to unless there is a
             // Route defined (with at least a destination)
-            this.loadDirectionsAndGasPrices();
+            if (!this.model.get('start')) {
+                CurrentPosition.getPromise()
+                    .done(_.bind(this.loadDirectionsAndGasPrices, this))
+                    .fail(function(){
+                        // TODO: handle with dialog and switch view to editor
+                        alert("Failed to get current location.");
+                    });
+            } else {
+                this.loadDirectionsAndGasPrices();
+            }
         },
 
         initializeMap: function () {
@@ -59,7 +68,7 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
             this.directionsDisplay.setMap(this.map);
         },
 
-        loadDirectionsAndGasPrices: function (event) {
+        loadDirectionsAndGasPrices: function () {
             var directionsRequest = {};
             if (this.model.get('useCurrentLocation')) {
                 directionsRequest.origin = new gmaps.LatLng(

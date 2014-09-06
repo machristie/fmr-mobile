@@ -22,7 +22,6 @@ define(['backbone', 'jquery', 'views/MainView', 'views/EditRoutePage', 'models/R
                 return false;
             });
             this.firstPage = true;
-            this.watchID = null;
             this.pages = {
                 main: new MainView({model: this.currentRoute}),
                 editRoute: new EditRoutePage({model: this.currentRoute})
@@ -48,13 +47,10 @@ define(['backbone', 'jquery', 'views/MainView', 'views/EditRoutePage', 'models/R
                 'destination': destination,
                 'useCurrentLocation': (start == null)
             });
-            // TODO: Do we want to stop watching after a while to conserve battery?
-            this.watchCurrentLocation(true);
             this.changePage(this.pages.main);
         },
 
         edit: function() {
-            this.watchCurrentLocation(true);
             this.changePage(this.pages.editRoute);
         },
 
@@ -71,43 +67,6 @@ define(['backbone', 'jquery', 'views/MainView', 'views/EditRoutePage', 'models/R
             }
             $( ":mobile-pagecontainer" ).pagecontainer( "change", page.$el,
                     { changeHash: false });
-        },
-
-        watchCurrentLocation: function (watch) {
-            if (!("geolocation" in navigator)) {
-                return;
-            }
-
-            // Already watching
-            if (watch && this.watchID) {
-                return;
-            }
-
-            // Need to stop watching
-            if (!watch && this.watchID) {
-
-                navigator.geolocation.clearWatch(this.watchID);
-                this.watchID=null;
-                return;
-            }
-
-            if (watch) {
-                this.watchID = navigator.geolocation.watchPosition(
-                    function(pos){
-                        console.log("got position", pos, new Date());
-                        CurrentPosition.set('coords', pos.coords);
-                        CurrentPosition.set('timestamp', pos.timestamp);
-                    },
-                    function(err) {
-                        console.log("Failed to get position", err);
-                    },
-                    {
-                        maximumAge: 500000,
-                        enableHighAccuracy: true,
-                        timeout: 10000
-                    }
-                );
-            }
         },
 
         routeEditSubmitted: function(event) {
