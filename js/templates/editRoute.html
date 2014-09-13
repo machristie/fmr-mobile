@@ -5,6 +5,13 @@
 <div role="main" class="ui-content">
     <label for="start">Start</label>
     <input name="start" id="start" value="<%= start %>" type="text">
+    <div class="ui-field-contain">
+        <label for="current-location">Start from my location</label>
+        <select name="current-location" id="current-location" data-role="flipswitch">
+            <option value="off">Off</option>
+            <option value="on">On</option>
+        </select>
+    </div>
     <label for="destination">Destination</label>
     <input name="destination" id="destination" value="<%= destination %>" type="text">
     <input type="submit" value="Submit" />

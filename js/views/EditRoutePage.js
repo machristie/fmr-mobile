@@ -12,17 +12,32 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
 
         events: {
             'click input[type=submit]': 'handleSubmit',
-            'keypress #destination': 'handleSubmitOnEnter'
+            'keypress #destination': 'handleSubmitOnEnter',
+            'change #current-location': 'handleUseCurrentLocationChange'
         },
 
         initialize: function() {
             this.listenTo(this.model, 'change', this.routeChanged);
+            // Cache the old 'start' value for restoring when use current
+            // location is toggled
+            this._oldStart = this.model.get('start');
         },
 
         render:function (eventName) {
             this.$el.html(this.template(this.model.attributes));
             this.enhance();
             return this;
+        },
+
+        show: function (event, ui) {
+            if (CurrentPosition.get('coords')) {
+                this.initializeWithCurrentPosition(CurrentPosition);
+            } else {
+                CurrentPosition.getPromise()
+                    .always(_.bind(function(){
+                        this.initializeWithCurrentPosition(CurrentPosition);
+                    }, this));
+            }
         },
 
         routeChanged: function (event) {
@@ -36,14 +51,42 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
         },
 
         handleSubmit: function (event) {
-            var start = this.$("#start");
-            var destination = this.$("#destination");
+            var useMyLocation = this.$("#current-location").val();
+            var start = (useMyLocation === "off") ? this.$("#start").val().trim() : "";
+            var destination = this.$("#destination").val().trim();
             this.model.set({
-                'useCurrentLocation': false,
-                'start': start.val().trim(),
-                'destination': destination.val().trim()
+                'useCurrentLocation': useMyLocation === "on",
+                'start': start,
+                'destination': destination
             });
             this.trigger("routeEditSubmitted");
+        },
+
+        handleUseCurrentLocationChange: function (event) {
+
+            if (this.$("#current-location").val() === "off") {
+                this.$("#start").val(this._oldStart).textinput("enable");
+            } else {
+                this._oldStart = this.$("#start").val();
+                this.$("#start").val("Use my location").textinput("disable");
+            }
+        },
+
+        initializeWithCurrentPosition: function (pos) {
+
+            var start = this.model.get('start');
+            // If we have coords but not 'start', then toggle on use current location
+            if (pos.get('coords') && (start == null || start.trim() === "")) {
+                // This will trigger a change event on #current-location, which
+                // is handled by handleUseCurrentLocationChange
+                this.$("#current-location").val("on").flipswitch("refresh");
+            }
+            // Can't get location so disable use current location toggle
+            if (pos.get('coords') == null) {
+                // Also will trigger change and call handleUseCurrentLocationChange
+                this.$("#current-location").val("off").flipswitch("disable");
+            }
+
         }
     });
 
