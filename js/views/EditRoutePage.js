@@ -11,7 +11,8 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
         template:_.template(editRouteTemplate),
 
         events: {
-            'click input[type=submit]': 'handleSubmit'
+            'click input[type=submit]': 'handleSubmit',
+            'keypress #destination': 'handleSubmitOnEnter'
         },
 
         initialize: function() {
@@ -25,6 +26,13 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
         },
 
         routeChanged: function (event) {
+        },
+
+        handleSubmitOnEnter: function(event) {
+            if (event.which !== ENTER_KEY) {
+                return;
+            }
+            this.handleSubmit(event);
         },
 
         handleSubmit: function (event) {
