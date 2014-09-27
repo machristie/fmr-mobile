@@ -13,14 +13,14 @@ define(['backbone', 'collections/GasPrices'], function(Backbone, GasPrices) {
         loadGasPrices: function(directionsResult) {
 
             console.log("In loadGasPrices");
-            // TODO: include maxAge as a parameter
             this.gasPrices.fetch({
                 reset: true,
                 type: 'POST',
                 data: {
                     "route": directionsResult.routes[0].overview_polyline,
                     "gas_grade": "R",
-                    "radius": "1609.344"
+                    "radius": "1609.344",
+                    "max_age": "24"
                 },
                 success: function(collection, response, options) {
                     console.log("gas price data", response);
