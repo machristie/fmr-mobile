@@ -30,6 +30,24 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
         },
 
         show: function (event, ui) {
+
+            var start = this.model.get('start');
+
+            // Initialize _oldStart again
+            this._oldStart = start;
+
+            // Set the initial state of the form
+            this.$('start').val(start);
+            this.$('destination').val(this.model.get('destination'));
+            if (start == null || start.trim() === "") {
+                // This will trigger a change event on #current-location, which
+                // is handled by handleUseCurrentLocationChange
+                this.$("#current-location").val("on").flipswitch("refresh");
+            } else {
+                this.$("#current-location").val("off").flipswitch("refresh");
+            }
+
+            // Verify we can make use of the "current location" option
             if (CurrentPosition.get('coords')) {
                 this.initializeWithCurrentPosition(CurrentPosition);
             } else {
@@ -74,17 +92,10 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
 
         initializeWithCurrentPosition: function (pos) {
 
-            var start = this.model.get('start');
-            // If we have coords but not 'start', then toggle on use current location
-            if (pos.get('coords') && (start == null || start.trim() === "")) {
-                // This will trigger a change event on #current-location, which
-                // is handled by handleUseCurrentLocationChange
-                this.$("#current-location").val("on").flipswitch("refresh");
-            }
             // Can't get location so disable use current location toggle
             if (pos.get('coords') == null) {
                 // Also will trigger change and call handleUseCurrentLocationChange
-                this.$("#current-location").val("off").flipswitch("disable");
+                this.$("#current-location").val("off").flipswitch("disable").flipswitch("refresh");
             }
 
         }
