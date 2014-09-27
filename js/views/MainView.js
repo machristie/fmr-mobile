@@ -28,6 +28,8 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
             this.directionsService = new gmaps.DirectionsService();
             this.directionsDisplay = new gmaps.DirectionsRenderer();
             this.infoWindowView = new GasPriceInfoWindow();
+
+            this.gasPriceMarkers = [];
         },
 
         render:function (eventName) {
@@ -92,9 +94,9 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
 
         gasPricesLoaded: function(eventName) {
 
+            this.removeGasPriceMarkers();
+
             var stats = this.model.gasPrices.stats();
-            // TODO: we need to keep track of markers that are added and remove
-            // the old markers when new gas prices are loaded
             this.model.gasPrices.forEach(function(gasPrice){
 
                 var priceText = "$" + gasPrice.get('price').toFixed(2);
@@ -110,7 +112,21 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
                     this.infoWindowView.className = RANK_CLASS_MAPPING[rank];
                     this.infoWindowView.open(gasPrice, this.map, marker);
                 }, this ) );
+
+                // Keep track of added markers so we can remove them later
+                this.gasPriceMarkers.push(marker);
             }, this);
+        },
+
+        removeGasPriceMarkers: function() {
+
+            _.each(this.gasPriceMarkers, function(marker){
+
+                marker.setMap(null);
+                gmaps.event.clearInstanceListeners(marker);
+            });
+
+            this.gasPriceMarkers = [];
         },
 
         _gasPriceRank: function(gasPrice, stats) {
