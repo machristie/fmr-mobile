@@ -1,6 +1,6 @@
 
-define(['backbone', 'underscore', 'jquery', 'gmaps', 'views/PageView', 'views/RouteEditor', 'views/GasPriceInfoWindow', 'models/CurrentPosition', 'text!templates/main.html'],
-function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, CurrentPosition, mainTemplate) {
+define(['backbone', 'underscore', 'jquery', 'gmaps', 'views/PageView', 'views/GasPriceInfoWindow', 'models/CurrentPosition', 'text!templates/main.html'],
+function(Backbone, _, $, gmaps, PageView, GasPriceInfoWindow, CurrentPosition, mainTemplate) {
     'use strict';
 
     var MARKER_RANK_COLORS = [
@@ -23,7 +23,7 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
         template:_.template(mainTemplate),
 
         initialize: function() {
-            this.routeEditor = new RouteEditor({model: this.model});
+            this.listenTo(this.model, 'change', this.routeChanged);
             this.listenTo(this.model.gasPrices, 'reset', this.gasPricesLoaded);
             this.directionsService = new gmaps.DirectionsService();
             this.directionsDisplay = new gmaps.DirectionsRenderer();
@@ -33,8 +33,7 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
         },
 
         render:function (eventName) {
-            this.$el.html(this.template());
-            this.$('div[data-role="header"]').append(this.routeEditor.render().el);
+            this.$el.html(this.template(this.model.attributes));
             this.initializeMap();
             this.enhance();
             return this;
@@ -127,6 +126,11 @@ function(Backbone, _, $, gmaps, PageView, RouteEditor, GasPriceInfoWindow, Curre
             });
 
             this.gasPriceMarkers = [];
+        },
+
+        routeChanged: function() {
+
+            this.$('h1').text(this.model.get('destination'));
         },
 
         _gasPriceRank: function(gasPrice, stats) {
