@@ -1,9 +1,23 @@
 @import "../bower_components/jquery-mobile-bower/css/jquery.mobile-1.4.2.css";
 
-html, body, #map-canvas, div[data-role="page"] {
+/* stretch the page to full height, so that map also takes up all available height */
+#main-view {
   height: 100%;
-  margin: 0px;
-  padding: 0px;
+}
+
+#main-view div[data-role="header"] {
+    position: absolute;
+    width: 100%;
+    height: 46px;
+    top: 0;
+}
+
+/* stretch map to full available height by using absolute position */
+#main-view #map-canvas {
+    position: absolute;
+    width: 100%;
+    top: 46px;
+    bottom: 0;
 }
 
 /*
