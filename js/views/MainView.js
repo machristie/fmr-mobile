@@ -98,7 +98,7 @@ function(Backbone, _, $, gmaps, PageView, GasPriceInfoWindow, CurrentPosition, m
             var stats = this.model.gasPrices.stats();
             this.model.gasPrices.forEach(function(gasPrice){
 
-                var priceText = "$" + gasPrice.get('price').toFixed(2);
+                var priceText = "$" + gasPrice.formattedPrice();
                 var rank = this._gasPriceRank(gasPrice, stats);
                 var color = MARKER_RANK_COLORS[rank];
                 var marker = new gmaps.Marker({

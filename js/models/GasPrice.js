@@ -26,6 +26,10 @@ define(['backbone'], function(Backbone) {
             // 'updated_date' is in ISO-8601 format
             response.updated_date = new Date(response.updated_date);
             return response;
+        },
+        formattedPrice: function() {
+
+            return Math.floor(this.get('price')*100)/100;
         }
     });
     return GasPrice;

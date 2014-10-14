@@ -27,6 +27,7 @@ function(Backbone, _, gmaps, template) {
             var templateData = _.extend({}, this.model.attributes);
             templateData.gradeText = GAS_GRADE_TEXT[this.model.get('grade')];
             templateData.updatedLessThanText = this._formatUpdatedLessThanText(this.model.get('updated_date'));
+            templateData.formattedPrice = this.model.formattedPrice();
             this.$el.attr('class', this.className);
             this.$el.html(this.template(templateData));
             return this;
