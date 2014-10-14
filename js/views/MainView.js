@@ -60,8 +60,8 @@ function(Backbone, _, $, gmaps, PageView, GasPriceInfoWindow, CurrentPosition, m
 
         initializeMap: function () {
             var myOptions = {
-              zoom: 10,
-              center: new gmaps.LatLng(-34.397, 150.644),
+              zoom: 5,
+              center: new gmaps.LatLng(40.737520, -95.980088),
               mapTypeId: gmaps.MapTypeId.ROADMAP,
               scaleControl: true
             };
