@@ -83,3 +83,10 @@
 #gas-price-info-window .updated-time {
   clear: both;
 }
+
+label.required:after {
+    content: " *";
+    color: #ee0000;
+    font-weight: bold;
+    font-size: 120%;
+}

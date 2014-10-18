@@ -69,11 +69,17 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
         },
 
         handleSubmit: function (event) {
-            var useMyLocation = this.$("#current-location").val();
-            var start = (useMyLocation === "off") ? this.$("#start").val().trim() : "";
+            var useCurrentLocation = this.getUseCurrentLocation();
+            var start = !useCurrentLocation ? this.$("#start").val().trim() : "";
             var destination = this.$("#destination").val().trim();
+            // Check that required fields are supplied
+            if (destination === "" || (!useCurrentLocation && start === "")) {
+                this.$('#requiredDialog').popup( "open" );
+                return;
+            }
+
             this.model.set({
-                'useCurrentLocation': useMyLocation === "on",
+                'useCurrentLocation': useCurrentLocation,
                 'start': start,
                 'destination': destination
             });
@@ -82,11 +88,13 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
 
         handleUseCurrentLocationChange: function (event) {
 
-            if (this.$("#current-location").val() === "off") {
+            if (!this.getUseCurrentLocation()) {
                 this.$("#start").val(this._oldStart).textinput("enable");
+                this.$("label[for='start']").addClass("required");
             } else {
                 this._oldStart = this.$("#start").val();
                 this.$("#start").val("Use my location").textinput("disable");
+                this.$("label[for='start']").removeClass("required");
             }
         },
 
@@ -98,6 +106,11 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
                 this.$("#current-location").val("off").flipswitch("disable").flipswitch("refresh");
             }
 
+        },
+
+        getUseCurrentLocation: function() {
+
+            return this.$("#current-location").val() === "on";
         }
     });
 

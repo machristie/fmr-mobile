@@ -12,7 +12,17 @@
             <option value="on">On</option>
         </select>
     </div>
-    <label for="destination">Destination</label>
+    <label for="destination" class="required">Destination</label>
     <input name="destination" id="destination" value="<%= destination %>" type="text">
     <input type="submit" value="Submit" />
+
+    <div data-role="popup" id="requiredDialog" data-dismissible="false">
+        <div data-role="header">
+            <h1>Required fields missing</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <p>Please supply all required fields.</p>
+            <a href="#" class="ui-btn ui-corner-all ui-shadow" data-rel="back" onclick="return false;">OK</a>
+        </div>
+    </div>
 </div>
