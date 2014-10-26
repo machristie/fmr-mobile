@@ -21,7 +21,7 @@ define(['backbone', 'jquery', 'views/MainView', 'views/EditRoutePage', 'models/R
                 window.history.back();
                 return false;
             });
-            this.firstPage = true;
+            this.currentPage = null;
             this.pages = {
                 main: new MainView({model: this.currentRoute}),
                 editRoute: new EditRoutePage({model: this.currentRoute})
@@ -49,14 +49,12 @@ define(['backbone', 'jquery', 'views/MainView', 'views/EditRoutePage', 'models/R
             if ($('#'+page.id).length === 0) {
                 $('body').append(page.render().$el);
             }
-            if (this.firstPage) {
-                // We turned off $.mobile.autoInitializePage, but now that we've
-                // added our first page to the DOM, we can now call initializePage.
-                $.mobile.initializePage();
-                this.firstPage = false;
+            if (this.currentPage){
+                this.currentPage.$el.hide();
             }
-            $( ":mobile-pagecontainer" ).pagecontainer( "change", page.$el,
-                    { changeHash: false });
+            page.$el.show();
+            page.show();
+            this.currentPage = page;
         },
 
         routeEditSubmitted: function(event) {

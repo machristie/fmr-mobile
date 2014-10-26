@@ -35,7 +35,6 @@ function(Backbone, _, $, gmaps, PageView, GasPriceInfoWindow, CurrentPosition, m
         render:function (eventName) {
             this.$el.html(this.template(this.model.attributes));
             this.initializeMap();
-            this.enhance();
             return this;
         },
 

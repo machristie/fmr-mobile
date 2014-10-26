@@ -25,7 +25,6 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
 
         render:function (eventName) {
             this.$el.html(this.template(this.model.attributes));
-            this.enhance();
             return this;
         },
 
@@ -40,12 +39,11 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
             this.$('start').val(start);
             this.$('destination').val(this.model.get('destination'));
             if (start == null || start.trim() === "") {
-                // This will trigger a change event on #current-location, which
-                // is handled by handleUseCurrentLocationChange
-                this.$("#current-location").val("on").flipswitch("refresh");
+                this.$("#current-location").val("on");
             } else {
-                this.$("#current-location").val("off").flipswitch("refresh");
+                this.$("#current-location").val("off");
             }
+            this.updateForUseCurrentLocation();
 
             // Verify we can make use of the "current location" option
             if (CurrentPosition.get('coords')) {
@@ -74,7 +72,7 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
             var destination = this.$("#destination").val().trim();
             // Check that required fields are supplied
             if (destination === "" || (!useCurrentLocation && start === "")) {
-                this.$('#requiredDialog').popup( "open" );
+                alert("Please supply all required fields.");
                 return;
             }
 
@@ -88,12 +86,18 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
 
         handleUseCurrentLocationChange: function (event) {
 
+            if (this.getUseCurrentLocation()) {
+                this._oldStart = this.$("#start").val();
+            }
+            this.updateForUseCurrentLocation();
+        },
+
+        updateForUseCurrentLocation: function () {
             if (!this.getUseCurrentLocation()) {
-                this.$("#start").val(this._oldStart).textinput("enable");
+                this.$("#start").val(this._oldStart).attr("disabled", false);
                 this.$("label[for='start']").addClass("required");
             } else {
-                this._oldStart = this.$("#start").val();
-                this.$("#start").val("Use my location").textinput("disable");
+                this.$("#start").val("Use my location").attr("disabled", true);
                 this.$("label[for='start']").removeClass("required");
             }
         },
@@ -102,10 +106,9 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
 
             // Can't get location so disable use current location toggle
             if (pos.get('coords') == null) {
-                // Also will trigger change and call handleUseCurrentLocationChange
-                this.$("#current-location").val("off").flipswitch("disable").flipswitch("refresh");
+                this.$("#current-location").val("off").attr("disabled", true);
+                this.updateForUseCurrentLocation();
             }
-
         },
 
         getUseCurrentLocation: function() {
