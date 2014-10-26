@@ -29,7 +29,7 @@ define(['backbone'], function(Backbone) {
         },
         formattedPrice: function() {
 
-            return Math.floor(this.get('price')*100)/100;
+            return (Math.floor(this.get('price')*100)/100).toFixed(2);
         }
     });
     return GasPrice;
