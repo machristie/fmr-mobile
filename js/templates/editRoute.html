@@ -1,18 +1,27 @@
-<div>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container">
     <h1>Edit Route</h1>
-</div>
+  </div>
+</nav>
 
-<div>
-    <label for="start">Start</label>
-    <input name="start" id="start" value="<%= start %>" type="text">
-    <div>
-        <label for="current-location">Start from my location</label>
-        <select name="current-location" id="current-location">
-            <option value="off">Off</option>
-            <option value="on">On</option>
-        </select>
+<div class="container">
+  <form role="form">
+    <div class="form-group">
+      <label for="start">Start</label>
+      <input name="start" id="start" value="<%= start %>" type="text" class="form-control">
     </div>
-    <label for="destination" class="required">Destination</label>
-    <input name="destination" id="destination" value="<%= destination %>" type="text">
-    <input type="submit" value="Submit" />
+    <div class="form-group">
+      <label for="current-location">Start from my location</label>
+      <select name="current-location" id="current-location" class="form-control">
+        <option value="off">Off</option>
+        <option value="on">On</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="destination" class="required">Destination</label>
+      <input name="destination" id="destination" value="<%= destination %>"
+        type="text" class="form-control">
+    </div>
+    <button id="submit" class="btn btn-default">Submit</button>
+  </form>
 </div>

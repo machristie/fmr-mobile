@@ -11,7 +11,7 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
         template:_.template(editRouteTemplate),
 
         events: {
-            'click input[type=submit]': 'handleSubmit',
+            'click #submit': 'handleSubmit',
             'keypress #destination': 'handleSubmitOnEnter',
             'change #current-location': 'handleUseCurrentLocationChange'
         },
@@ -73,7 +73,7 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
             // Check that required fields are supplied
             if (destination === "" || (!useCurrentLocation && start === "")) {
                 alert("Please supply all required fields.");
-                return;
+                return false;
             }
 
             this.model.set({
@@ -82,6 +82,7 @@ function(Backbone, _, PageView, CurrentPosition, editRouteTemplate) {
                 'destination': destination
             });
             this.trigger("routeEditSubmitted");
+            return false;
         },
 
         handleUseCurrentLocationChange: function (event) {
