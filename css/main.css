@@ -5,11 +5,20 @@
   height: 100%;
 }
 
-#main-view div[data-role="header"] {
+#main-view nav {
     position: absolute;
     width: 100%;
     height: 46px;
     top: 0;
+}
+
+#main-view nav div.container h3 {
+  margin-top: 12px;
+}
+/* button has 6px of padding so to line up button text with h3 above need to
+ * set margin-top of h3 - 6px */
+#main-view nav div.container a[role="button"] {
+  margin-top: 6px;
 }
 
 /* stretch map to full available height by using absolute position */
