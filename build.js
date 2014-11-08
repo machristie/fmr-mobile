@@ -1,10 +1,8 @@
 ({
     mainConfigFile: "js/main.js",
-    // Copy entire app to 'dir', optimizing CSS as we go
-    appDir: ".",
     baseUrl: "js",
     // Output directory
-    dir: "build",
+    dir: "build/js",
     // We'll only optimize the modules listed below
     skipDirOptimize: true,
     paths: {
